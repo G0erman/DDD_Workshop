@@ -28,6 +28,15 @@ class BaseElement(object):
         except TimeoutException:
             print('Element is not present. Timeout')
 
+    def wait_to_be_clickable(self):
+        try:
+            web_element = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable(locator=self.locator)
+            )
+            return web_element
+        except TimeoutException:
+            print('Element is not clickable. Timeout')
+
 
     def set_text(self, txt):
         web_element = self.find_by_visibility()
@@ -45,9 +54,7 @@ class BaseElement(object):
         return None
 
     def attribute_visible(self, attr_name):
-        web_element = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable(locator=self.locator)
-        )
+        web_element = self.wait_to_be_clickable()
         attribute = web_element.get_attribute(attr_name)
         return attribute
 
